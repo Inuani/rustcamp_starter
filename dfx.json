@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "canisters": {
+    "rust_canister": {
+      "type": "rust",
+      "package": "rust_canister",
+      "candid": "src/rust_canister/rust_canister.did"
+    }
+  },
+  "output_env_file": ".env"
+}

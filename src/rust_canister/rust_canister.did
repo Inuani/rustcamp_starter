@@ -1,0 +1,4 @@
+service : {
+  greet : (text) -> (text) query;
+  greet_two_times : (text) -> (text) query;
+}
