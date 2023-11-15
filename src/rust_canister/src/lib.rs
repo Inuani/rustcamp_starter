@@ -11,7 +11,10 @@ thread_local!{
     // RefCell doesn't provide thread safety
     // RefCell provides "interior mutability".  even if RefCell is accessed through an immutable reference, you can still change the data inside it. 
     pub static MANIFESTO: RefCell<String> = RefCell::new("Go look for aliens in the ICPverse".to_string());
+
+    pub static GOALS: RefCell<Vec<String>> = RefCell::new(vec![]);
 }
+
 
 #[query]
 fn get_name() -> &'static str {
@@ -26,6 +29,16 @@ fn get_manifesto() -> String {
 #[update]
 fn set_manifesto(new_manifesto: String) {
     MANIFESTO.with(|manifesto| *manifesto.borrow_mut() = new_manifesto);
+}
+
+#[query]
+fn get_goals() -> Vec<String> {
+    GOALS.with(|goals| goals.borrow().clone())
+}
+
+#[update]
+fn add_goal(new_goal: String) {
+    GOALS.with(|goals| goals.borrow_mut().push(new_goal));
 }
 
 export_candid!();

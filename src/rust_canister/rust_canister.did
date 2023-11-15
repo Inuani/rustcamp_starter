@@ -1,4 +1,6 @@
 service : {
+  add_goal : (text) -> ();
+  get_goals : () -> (vec text) query;
   get_manifesto : () -> (text) query;
   get_name : () -> (text) query;
   set_manifesto : (text) -> ();
