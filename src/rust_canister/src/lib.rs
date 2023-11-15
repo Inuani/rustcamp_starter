@@ -1,6 +1,8 @@
 use ic_cdk::{query, update, export_candid};
 use std::cell::RefCell;
 
+mod goals;
+
 thread_local!{
 
     //This is a string literal. In Rust, string literals have a 'static lifetime because they are embedded directly in the final binary and are always available during the program execution.
@@ -31,14 +33,5 @@ fn set_manifesto(new_manifesto: String) {
     MANIFESTO.with(|manifesto| *manifesto.borrow_mut() = new_manifesto);
 }
 
-#[query]
-fn get_goals() -> Vec<String> {
-    GOALS.with(|goals| goals.borrow().clone())
-}
-
-#[update]
-fn add_goal(new_goal: String) {
-    GOALS.with(|goals| goals.borrow_mut().push(new_goal));
-}
 
 export_candid!();
