@@ -8,6 +8,8 @@ mod goals;
 mod member;
 mod token;
 mod types;
+mod httprequest;
+use httprequest::{HttpRequest, HttpResponse, IssueData};
 pub use types::{Member, Account, Subaccount, Proposal, CreateProposalOk, CreateProposalErr, VoteErr, VoteOk, Status};
 
 thread_local!{
@@ -29,6 +31,8 @@ thread_local!{
 
     pub static PROPOSALS: RefCell<HashMap<u64, Proposal>> = RefCell::new(HashMap::new());
     pub static NEXT_PROPOSAL_ID: RefCell<u64> = RefCell::new(0);
+
+    pub static ISSUES: RefCell<Vec<IssueData>> = RefCell::new(Vec::new());
 }
 
 #[query]

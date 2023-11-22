@@ -1,16 +1,55 @@
 type Account = record { owner : principal; subaccount : opt vec nat8 };
+type CreateProposalErr = variant { NotDAOMember; NotEnoughTokens };
+type CreateProposalOk = variant { ProposalCreated : nat64 };
+type HttpRequest = record {
+  url : text;
+  method : text;
+  body : vec nat8;
+  headers : vec record { text; text };
+};
+type HttpResponse = record {
+  body : vec nat8;
+  headers : vec record { text; text };
+  streaming_strategy : opt StreamingStrategy;
+  status_code : nat16;
+};
+type IssueData = record {
+  title : text;
+  body : text;
+  state : text;
+  number : nat64;
+};
 type Member = record { age : nat8; name : text };
+type Proposal = record {
+  id : nat64;
+  status : Status;
+  votes : int64;
+  voters : vec principal;
+  manifest : text;
+};
 type Result = variant { Ok; Err : text };
-type Result_1 = variant { Ok : Member; Err : text };
+type Result_1 = variant { Ok : CreateProposalOk; Err : CreateProposalErr };
+type Result_2 = variant { Ok : Member; Err : text };
+type Result_3 = variant { Ok : VoteOk; Err : VoteErr };
+type Status = variant { Open; Rejected; Accepted };
+type StreamingStrategy = variant {
+  Callback : record { token : record {}; callback : func () -> () query };
+};
+type VoteErr = variant { AlreadyVoted; ProposalEnded; ProposalNotFound };
+type VoteOk = variant { ProposalOpen; ProposalRefused; ProposalAccepted };
 service : {
   add_goal : (text) -> ();
   add_member : (Member) -> (Result);
-  balanceOf : (Account) -> (nat64) query;
+  balance_of : (Account) -> (nat64) query;
+  createProposal : (text) -> (Result_1);
+  get_all_issues : () -> (vec IssueData) query;
   get_all_members : () -> (vec Member) query;
   get_goals : () -> (vec text) query;
   get_manifesto : () -> (text) query;
-  get_member : (principal) -> (Result_1) query;
+  get_member : (principal) -> (Result_2) query;
   get_name : () -> (text) query;
+  get_proposal : (nat64) -> (opt Proposal) query;
+  http_request : (HttpRequest) -> (HttpResponse) query;
   mint : (principal, nat64) -> ();
   numbers_of_members : () -> (nat64) query;
   remove_member : () -> (Result);
@@ -20,4 +59,5 @@ service : {
   total_supply : () -> (nat64) query;
   transfer : (Account, Account, nat64) -> (Result);
   update_member : (Member) -> (Result);
+  vote : (nat64, bool) -> (Result_3);
 }
