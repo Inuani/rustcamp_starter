@@ -1,6 +1,30 @@
 {
   "scripts": {
+    "build": "echo 'Building project...'",
     "generate": "./did.sh && dfx generate",
     "gen-deploy": "./did.sh && dfx generate && dfx deploy -y"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^0.20.0",
+    "@dfinity/principal": "^0.20.0"
   }
+}
+
+{
+  "version": 1,
+  "canisters": {
+    "rust_canister": {
+      "type": "rust",
+      "package": "rust_canister",
+      "candid": "src/rust_canister/rust_canister.did"
+    },
+    "frontend": {
+      "type": "assets",
+      "source": ["src/frontend/"],
+      "frontend": {
+        "entrypoint": "src/frontend/index.html"
+      }
+    }
+  },
+  "output_env_file": ".env"
 }

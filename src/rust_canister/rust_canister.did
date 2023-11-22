@@ -1,7 +1,23 @@
+type Account = record { owner : principal; subaccount : opt vec nat8 };
+type Member = record { age : nat8; name : text };
+type Result = variant { Ok; Err : text };
+type Result_1 = variant { Ok : Member; Err : text };
 service : {
   add_goal : (text) -> ();
+  add_member : (Member) -> (Result);
+  balanceOf : (Account) -> (nat64) query;
+  get_all_members : () -> (vec Member) query;
   get_goals : () -> (vec text) query;
   get_manifesto : () -> (text) query;
+  get_member : (principal) -> (Result_1) query;
   get_name : () -> (text) query;
+  mint : (principal, nat64) -> ();
+  numbers_of_members : () -> (nat64) query;
+  remove_member : () -> (Result);
   set_manifesto : (text) -> ();
+  token_name : () -> (text) query;
+  token_symbol : () -> (text) query;
+  total_supply : () -> (nat64) query;
+  transfer : (Account, Account, nat64) -> (Result);
+  update_member : (Member) -> (Result);
 }
